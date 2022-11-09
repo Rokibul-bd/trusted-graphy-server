@@ -42,6 +42,13 @@ async function run() {
             const services = await cursor.toArray()
             res.send(services)
         })
+        // add service from user 
+        app.post('/addservice', async (req, res) => {
+            const service = req.body;
+            const result = await servicesCollactions.insertOne(service)
+            res.send(result)
+        })
+
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
@@ -52,6 +59,12 @@ async function run() {
             const review = req.body;
             const result = await reviewsCollactions.insertOne(review)
             res.send(result)
+        })
+        app.get('/reviews', async (req, res) => {
+            const query = {}
+            const cursor = reviewsCollactions.find(query)
+            const reviews = await cursor.toArray()
+            res.send(reviews)
         })
     }
     finally {
