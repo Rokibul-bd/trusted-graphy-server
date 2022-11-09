@@ -8,7 +8,7 @@ const app = express()
 
 //Midleware 
 app.use(cors())
-app.use(express())
+app.use(express.json())
 
 app.get('/', (req, res) => {
     res.send('your Server is Running')
@@ -22,11 +22,12 @@ async function run() {
     try {
         const servicesCollactions = client.db('trustedGrapy').collection('services');
         const blogsCollactions = client.db('trustedGrapy').collection('blogs');
+        const reviewsCollactions = client.db('trustedGrapy').collection('reviews');
 
         app.get('/services', async (req, res) => {
             const query = {}
             const cursor = servicesCollactions.find(query)
-            const services = await cursor.limit(4).toArray()
+            const services = await cursor.limit(3).toArray()
             res.send(services)
         })
         app.get('/blogs', async (req, res) => {
@@ -46,6 +47,11 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const service = await servicesCollactions.findOne(query)
             res.send(service)
+        })
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewsCollactions.insertOne(review)
+            res.send(result)
         })
     }
     finally {
