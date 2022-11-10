@@ -73,6 +73,29 @@ async function run() {
             const result = await reviewsCollactions.deleteOne(query)
             res.send(result)
         })
+        // review load by email
+        app.get('/userreview', async (req, res) => {
+            const query = req.params.email;
+            const cursor = reviewsCollactions.find(query)
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+        // update review 
+        // app.patch('/userreview/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const { email, name, imgUrl, review } = req.body.status;
+        //     const query = { _id: ObjectId(id) }
+        //     const updateDoc = {
+        //         $set: {
+        //             email: email,
+        //             name: name,
+        //             imgUrl: imgUrl,
+        //             review: review
+        //         }
+        //     }
+        //     const result = await reviewsCollactions.updateOne(query, updateDoc)
+        //     res.send(result)
+        // })
     }
     finally {
 
@@ -80,16 +103,6 @@ async function run() {
 }
 
 run().catch(err => console.error(err))
-
-// client.connect(err => {
-//     const collection = client.db("test").collection("devices");
-//     // perform actions on the collection object
-//     client.close();
-// });
-
-
-
-
 
 app.listen(port, (req, res) => {
     console.log(`your server is running on port ${port}`)
